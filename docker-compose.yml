@@ -15,8 +15,21 @@ services:
       - "8000:8000"
     volumes:
       - app-data:/app/data
-    env_file:
-      - .env
+    environment:
+      # --- Required: no working default, MUST be set in Portainer ---
+      - ADMIN_USERNAME=${ADMIN_USERNAME}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+
+      # --- Required: has a placeholder default, but you should override ---
+      - BASE_URL=${BASE_URL:-http://localhost:8000}
+      - TIMEZONE=${TIMEZONE:-UTC}
+
+      # --- Usually fine as-is ---
+      - HOST=${HOST:-0.0.0.0}
+      - PORT=${PORT:-8000}
+      - DATABASE_URL=${DATABASE_URL:-sqlite:///./data/raisemyhand.db}
+      - DEMO_MODE=${DEMO_MODE:-false}
+      - CREATE_DEFAULT_API_KEY=${CREATE_DEFAULT_API_KEY:-false}
     command: >
       sh -c "
         echo '🎯 Starting RaiseMyHand' &&
